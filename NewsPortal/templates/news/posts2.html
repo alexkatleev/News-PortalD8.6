@@ -18,6 +18,7 @@ Posts2
                 <td>{{ post.title|censor }}</td>
                 <td>{{ post.time_in|date:'d M Y' }}</td>
                 <td>{{ post.text|truncatewords:20|censor }}</td>
+                <td>{{ post.view|censor }}</td>
             </tr>
             {% endfor %}
         </table>

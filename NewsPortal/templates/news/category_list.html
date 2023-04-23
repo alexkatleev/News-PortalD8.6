@@ -1,11 +1,6 @@
 {% extends 'news/default.html' %}
 {% load static %}
-{% load custom_filters %}
-{% load custom_tags %}
 
-{% block title %}
-Post
-{% endblock title %}
 {% block MyCss %}
 <title> {{ news.title }}</title>
 <link rel="stylesheet" href="{% static 'css/base.css' %}">
@@ -76,9 +71,6 @@ Post
       <br><br>
       <div class="col-lg-8 col-lg-offset-2">
         <h4>Список новостей по заданию </h4>
-          {% if is_not_subscriber %}
-              <p class="text-center"><a href="{%url 'subscribe' category.id%}"class="btn btn-secondary btn-sm">Подписаться на категорию</a></p>
-          {% endif%}
         <table >
           <tr>
             <td>ID поста</td>
@@ -89,22 +81,19 @@ Post
             <td>Заголовок</td>
             <td>Категории</td>
           </tr>
-              {% for post_n in news %}
+              {% for post_n in category_news_list %}
           <tr>
             <td>{{ post_n.pk }}</td>
             <td>{{ post_n.dataCreations }}</td>
-            <td> <a{{ post_n.pk }}>{{ post_n.get_categoryType_display }}</a></td>
+            <td>{{ post_n.postCategory }}</td>
             <td>{{ post_n.author }}</td>
             <td>{{ post_n.rating }}</td>
             <td class="leftAligned"><a href=post/{{ post_n.pk }}>{{ post_n.title }}</a></td>
-            <td class="leftAligned"><a href='categories/{{ post_n.pk }}'>{% for category in post_n.postCategory.all %}<span>{{ category }}</span><br>
             {% endfor %}
-            {% endfor %}
-            {% for post in category_news_list %}
-            <td>{% for category in post.postCategory.all %}
-            <td class="leftAligned"><a href="categories/{{ category.id }}">{{ postCategory }}</a></td>
-            {% endfor %}
-{% endfor %}
+              {% for post in post.postCategory.all%}
+                  <a href="{% url 'category_list' category.id%}">{{post.postCategory}}</a>
+              {% endfor %}
+              </tr>
         </table>
       </div>
   </div>
@@ -167,4 +156,5 @@ Post
     </div>
   </div>
 </div>
+
 {% endblock %}

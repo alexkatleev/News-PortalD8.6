@@ -35,6 +35,19 @@ ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_VERIFICATION = 'none'
 ACCOUNT_FORMS = {'signup': 'sign.models.BasicSignupForm'}
 
+SERVER_EMAIL = 'alexander.katleev@yandex.ru'
+EMAIL_HOST = 'smtp.yandex.ru'  # адрес сервера Яндекс-почты для всех один и тот же
+EMAIL_PORT = 465  # порт smtp сервера тоже одинаковый
+EMAIL_HOST_USER = 'alexander.katleev'  # ваше имя пользователя, например, если ваша почта user@yandex.ru,
+EMAIL_HOST_PASSWORD = '234cfif234'  # пароль от почты
+EMAIL_USE_SSL = True
+DEFAULT_FROM_EMAIL = 'alexander.katleev@yandex.ru'
+
+SITE_URL = 'http://127.0.0.1:8000'
+
+APSCHEDULER_DATETIME_FORMAT = "N j, Y, f:s a"
+APSCHEDULER_RUN_NOW_TIMEOUT = 25
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -45,13 +58,14 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_filters',
+    'django_apscheduler',
     'django.contrib.sites',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
     # ... include the providers you want to enable:
     'allauth.socialaccount.providers.google',
-    'news',
+    'news.apps.NewsConfig',
     'sign',
     'protect',
     # 'django.contrib.flatpages',
@@ -149,3 +163,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
+

@@ -4,6 +4,7 @@ from .models import Post
 from allauth.account.forms import SignupForm
 from django.contrib.auth.models import Group
 
+
 class PostForm(forms.ModelForm):
     class Meta:
         model = Post
@@ -28,8 +29,10 @@ class PostForm(forms.ModelForm):
             )
         return cleaned_data
 
+
 class DateInput(forms.DateInput):
     input_type = 'date'
+
 
 class BasicSignupForm(SignupForm):
 

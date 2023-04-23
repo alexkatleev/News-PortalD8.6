@@ -1,35 +1,28 @@
+
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Авторы статей</title>
+    <title>{% extends 'news/default2.html' %}</title>
 </head>
 <body>
-{% for author in  Authors %}
-<p> {{ author.authorUser }} </p>
-{% endfor %}
-{# Добавляем пагинацию на страницу #}
+{% block content %}
+<h2> Авторы: NewsPortal</h2>
 
-   {# Информация о предыдущих страницах #}
-   {% if page_obj.has_previous %}
-       <a href="?page=1">1</a>
-       {% if page_obj.previous_page_number != 1 %}
-           ...
-           <a href="?page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a>
-       {% endif %}
-   {% endif %}
+</table>
+        <h4>Список авторов </h4>
+        <table >
+          <tr>
+            <td>Авторы Статьи</td>
 
-   {# Информация о текущей странице #}
-   {{ page_obj.number }}
+          </tr>
+              {% for author in  Authors %}
+            <td> {{ author.authorUser }} </td>
+          <tr>
 
-   {# Информация о следующих страницах #}
-   {% if page_obj.has_next %}
-       <a href="?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a>
-       {% if paginator.num_pages != page_obj.next_page_number %}
-           ...
-           <a href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a>
-       {% endif %}
-   {% endif %}
-
+            </tr>
+              {% endfor %}
+        </table>
+{% endblock %}
 </body>
 </html>

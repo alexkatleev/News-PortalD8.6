@@ -1,5 +1,4 @@
-from django.contrib.auth.models import User
-from param import *
+from datetime import datetime
 from django.db.models import Sum
 from django.db import models
 from django.urls import reverse
@@ -75,51 +74,30 @@ class Author(models.Model):
 
 
 class Category(models.Model):
-    """
-    Модель Category
-    Темы, которые они отражают (спорт, политика, образование и т. д.).
-    Имеет единственное поле: название категории.
-    - <name> Поле должно быть уникальным (в определении поля необходимо написать параметр unique = True).
-    """
     name = models.CharField(max_length=64, unique=True)
+    subscribers = models.ManyToManyField(User, related_name='categories',blank=True, null=True)
 
     def __str__(self):
-        return f"{self.name}"
+        return self.name
 
 
 class Post(models.Model):
-    """
-    Модель Post
-    Эта модель должна содержать в себе статьи и новости, которые создают пользователи.
-    Каждый объект может иметь одну или несколько категорий.
-    Соответственно, модель должна включать следующие поля:
-    - <author>        связь «один ко многим» с моделью Author;
-    - <categoryFild>  поле с выбором — «статья» или «новость»;
-    - <dataCreations> автоматически добавляемая дата и время создания;
-    - <postCategory>  связь «многие ко многим» с моделью Category (с дополнительной моделью PostCategory);
-    - <title>         заголовок статьи/новости;
-    - <text>          текст статьи/новости;
-    - <rating>        рейтинг статьи/новости.
-    """
-    author = models.ForeignKey(Author, on_delete=models.CASCADE)
-    categoryType = models.CharField(max_length=20, choices=CATEGORY_CHOISES, default=ARTICLE)
+    author = models.ForeignKey(Author, on_delete=models.CASCADE, null=True, default=0)
+    categoryType = models.CharField(max_length=2, choices=OPTIONS_POST, default=article)
     dataCreations = models.DateTimeField(auto_now_add=True)
     postCategory = models.ManyToManyField(Category, through='PostCategory')
     title = models.CharField(max_length=128)
     text = models.TextField()
     rating = models.SmallIntegerField(default=0)
 
+    def get_absolute_url(self):
+        return f'/news/{self,id}'
+
     def like(self):
-        """
-        - like()    который увеличивает рейтинг на единицу.
-        """
         self.rating += 1
         self.save()
 
     def dislike(self):
-        """
-        - dislike() который уменьшают рейтинг на единицу.
-        """
         self.rating -= 1
         self.save()
 
@@ -142,11 +120,11 @@ class PostCategory(models.Model):
     - <postThrough>     связь «один ко многим» с моделью Post;
     - <categoryThrough> связь «один ко многим» с моделью Category.
     """
-    postThrough = models.ForeignKey(Post, on_delete=models.CASCADE)
-    categoryThrough = models.ForeignKey(Category, on_delete=models.CASCADE)
+    post = models.ForeignKey('Post', on_delete=models.CASCADE)
+    category = models.ForeignKey('Category', on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"{self.postThrough},from the category:  {self.categoryThrough}"
+        return self.category.title()
 
 
 class Comment(models.Model):
@@ -186,7 +164,7 @@ class Comment(models.Model):
 
 class Post2(models.Model):
     author = models.ForeignKey(Author, on_delete=models.CASCADE)
-    view = models.CharField(max_length=2, choices=OPTIONS_POST)
+    view = models.CharField(max_length=2, choices=OPTIONS_POST, default=news)
     time_in = models.DateTimeField(auto_now_add=True)
     title = models.CharField(max_length=150)
     text = models.TextField()
@@ -223,3 +201,16 @@ class BaseRegisterForm(UserCreationForm):
                   "email",
                   "password1",
                   "password2", )
+
+
+class Appointment(models.Model):
+    date = models.DateField(
+        default=datetime.utcnow,
+    )
+    client_name = models.CharField(
+        max_length=200
+    )
+    message = models.TextField()
+
+    def __str__(self):
+        return f'{self.client_name}: {self.message}'
