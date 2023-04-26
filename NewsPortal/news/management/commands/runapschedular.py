@@ -17,8 +17,8 @@ logger = logging.getLogger(__name__)
 def my_job(): 
     today = datetime.datetime.now()
     last_week = today - datetime.timedelta(days=7)
-    posts = Post.objects.filter(created_at__gte=last_week)
-    categories = set(posts.values_list('category__name', flat=True))
+    posts = Post.objects.filter(dataCreations__gte=last_week)
+    categories = set(posts.values_list('postCategory__name', flat=True))
     subscribers = set(Category.objects.filter(name__in=categories).values_list('subscribers__email', flat=True))
     html_content = render_to_string(
       'daily_post.html',
@@ -30,8 +30,8 @@ def my_job():
     msg = EmailMultiAlternatives(
         subject='Статьи за неделю',
         body='',
-        from_email='nikitakyz2000@yandex.ru',
-        to=['nikitakryzx@mail.ru'],
+        from_email='alexander.katleev@yandex.ru',
+        to=['alexkatleev@mail.ru'],
     )
     msg.attach_alternative(html_content, "text/html")
 

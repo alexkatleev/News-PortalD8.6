@@ -39,7 +39,7 @@ SERVER_EMAIL = 'alexander.katleev@yandex.ru'
 EMAIL_HOST = 'smtp.yandex.ru'  # адрес сервера Яндекс-почты для всех один и тот же
 EMAIL_PORT = 465  # порт smtp сервера тоже одинаковый
 EMAIL_HOST_USER = 'alexander.katleev'  # ваше имя пользователя, например, если ваша почта user@yandex.ru,
-EMAIL_HOST_PASSWORD = '234cfif234'  # пароль от почты
+EMAIL_HOST_PASSWORD = ''  # пароль от почты
 EMAIL_USE_SSL = True
 DEFAULT_FROM_EMAIL = 'alexander.katleev@yandex.ru'
 
