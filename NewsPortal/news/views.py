@@ -1,8 +1,7 @@
-
-from django.views import View
+from django.http import HttpResponse
+from .tasks import *
 from django.core.mail import send_mail
 from datetime import datetime
-
 from .models import Appointment
 from  django.views.generic.base import View
 from .models import *
@@ -154,6 +153,15 @@ def unsubscribe(request, pk):
     message = 'вы отписались от категории: '
     return render(request, 'subscribe.html', {'category': category, 'message': message})
 
+@login_required
+def upgrade_me(request):
+    user = request.user
+    authors_group = Group.objects.get(name='authors')
+    if not request.user.groups.filter(name='authors').exists():
+        authors_group.user_set.add(user)
+    return redirect('/news')
+
+
 
 class AppointmentView(View):
     def get(self, request, *args, **kwargs):
@@ -177,3 +185,9 @@ class AppointmentView(View):
         )
 
         return redirect('appointments:make_appointment')
+
+
+# class IndexView(View):
+#     def get(self, request):
+#         hello.delay()
+#         return HttpResponse('Hello!')

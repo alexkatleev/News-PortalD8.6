@@ -19,7 +19,7 @@ def send_notifications(preview, pk, title, subscribers):
         subject=title,
         body='',
         from_email=settings.DEFAULT_FROM_EMAIL,
-        to=['alexkatleev@mail.ru.ru'],
+        to=['alexkatleev@mail.ru'],
     )
     print(settings.DEFAULT_FROM_EMAIL)
     msg.attach_alternative(html_content, 'text/html')
@@ -29,7 +29,7 @@ def send_notifications(preview, pk, title, subscribers):
 @receiver(m2m_changed, sender=PostCategory)
 def notify_about_new_post(sender, instance, **kwargs):
     if kwargs['action'] == 'post_add':
-        categories = instance.category.all()
+        categories = instance.postCategory.all()
         subscribers_emails = []
 
         for cat in categories:

@@ -8,4 +8,5 @@ urlpatterns = [
     path('sign/', include('sign.urls')),
     path('news/', include('news.urls')),
     path('accounts/', include('allauth.urls')),
+
 ]

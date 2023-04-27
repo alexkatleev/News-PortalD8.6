@@ -39,6 +39,7 @@ OPTIONS_POST = [
     (news, 'Новость')
 ]
 
+
 class Author(models.Model):
     """
     Модель Author
@@ -75,7 +76,7 @@ class Author(models.Model):
 
 class Category(models.Model):
     name = models.CharField(max_length=64, unique=True)
-    subscribers = models.ManyToManyField(User, related_name='categories',blank=True, null=True)
+    subscribers = models.ManyToManyField(User, related_name='categories', blank=True, null=True)
 
     def __str__(self):
         return self.name
@@ -91,7 +92,7 @@ class Post(models.Model):
     rating = models.SmallIntegerField(default=0)
 
     def get_absolute_url(self):
-        return f'/news/{self,id}'
+        return f'/news/{self, id}'
 
     def like(self):
         self.rating += 1
@@ -162,6 +163,7 @@ class Comment(models.Model):
     def __str__(self):
         return f"{self.dataCreation}, {self.userPost}"
 
+
 class Post2(models.Model):
     author = models.ForeignKey(Author, on_delete=models.CASCADE)
     view = models.CharField(max_length=2, choices=OPTIONS_POST, default=news)
@@ -200,7 +202,7 @@ class BaseRegisterForm(UserCreationForm):
                   "last_name",
                   "email",
                   "password1",
-                  "password2", )
+                  "password2",)
 
 
 class Appointment(models.Model):

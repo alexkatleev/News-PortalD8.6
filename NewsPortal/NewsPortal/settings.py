@@ -12,6 +12,13 @@ SETTINGS_PATH = os.path.dirname(os.path.dirname(__file__))
 SECRET_KEY = 'django-insecure-4tcvpw^*+b50+37#-b!!2npcnlg*v#=0mna*-@x02e7z4#-92b'
 
 # SECURITY WARNING: don't run with debug turned on in production!
+
+CELERY_BROKER_URL = 'redis://default:LPBuX08eoMiwe1vxICD8zQPCcJdXFXbP@redis-16383.c98.us-east-1-4.ec2.cloud.redislabs.com:16383'
+CELERY_RESULT_BACKEND = 'redis://default:LPBuX08eoMiwe1vxICD8zQPCcJdXFXbP@redis-16383.c98.us-east-1-4.ec2.cloud.redislabs.com:16383'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+
 DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1']
@@ -32,14 +39,14 @@ ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
-ACCOUNT_EMAIL_VERIFICATION = 'none'
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 ACCOUNT_FORMS = {'signup': 'sign.models.BasicSignupForm'}
 
 SERVER_EMAIL = 'alexander.katleev@yandex.ru'
 EMAIL_HOST = 'smtp.yandex.ru'  # адрес сервера Яндекс-почты для всех один и тот же
 EMAIL_PORT = 465  # порт smtp сервера тоже одинаковый
 EMAIL_HOST_USER = 'alexander.katleev'  # ваше имя пользователя, например, если ваша почта user@yandex.ru,
-EMAIL_HOST_PASSWORD = ''  # пароль от почты
+EMAIL_HOST_PASSWORD = '234cfif234'  # пароль от почты
 EMAIL_USE_SSL = True
 DEFAULT_FROM_EMAIL = 'alexander.katleev@yandex.ru'
 
@@ -47,6 +54,8 @@ SITE_URL = 'http://127.0.0.1:8000'
 
 APSCHEDULER_DATETIME_FORMAT = "N j, Y, f:s a"
 APSCHEDULER_RUN_NOW_TIMEOUT = 25
+
+
 
 # Application definition
 
@@ -163,4 +172,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
+
 

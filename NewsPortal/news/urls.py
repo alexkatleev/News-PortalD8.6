@@ -7,9 +7,10 @@ from django.shortcuts import redirect
 # Импортируем созданное нами представление
 from .views import ( PostDetail, PostSearch,)
 from django.contrib.auth.views import LoginView, LogoutView
-
+# from .views import IndexView
 
 urlpatterns = [
+    # path('', IndexView.as_view()),
     path('', Posts.as_view()),
     path('authors/', AuthorsPage.as_view()),
     path('post/<int:pk>/', PostDetail.as_view()),

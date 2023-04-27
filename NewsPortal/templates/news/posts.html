@@ -70,7 +70,7 @@
         <h4>Публикация № {{ ps.pk }}</h4>
           <ul>
               <li align="left">Дата создания:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ ps.dataCreations }}</li>
-              <li align="left">Категория поста:&nbsp;&nbsp;&nbsp;&nbsp;{{ ps.categoryType }}</li>
+              <li align="left">Категория поста:&nbsp;&nbsp;&nbsp;&nbsp;{{ ps.get_categoryType_display }}</li>
               <li align="left">Автор поста:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ ps.author }}</li>
               <li align="left">Рейтинг поста:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ ps.rating }}</li>
 
