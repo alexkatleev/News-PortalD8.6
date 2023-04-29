@@ -3,34 +3,34 @@ from .tasks import *
 from django.core.mail import send_mail
 from datetime import datetime
 from .models import Appointment
-from  django.views.generic.base import View
+from django.views.generic.base import View
 from .models import *
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
 from .forms import PostForm
-from .models import Post, PostCategory, Author,Category
 from .filters import PostFilter
 from django.contrib.auth.models import User, Group
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.shortcuts import redirect, get_object_or_404, render, reverse
 from django.contrib.auth.decorators import login_required
+from django.core.cache import cache
 
-
-
-class PostDetail(LoginRequiredMixin,View):
+class PostDetail(LoginRequiredMixin, View):
     def get(self, request, pk):
         ps = Post.objects.get(id=pk)
-        return render(request, "news/posts.html", {'ps':ps})
+        return render(request, "news/posts.html", {'ps': ps})
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        return context
+    def get_object(self, *args, **kwargs):  # переопределяем метод получения объекта, как ни странно
+        obj = cache.get(f'product-{self.kwargs["pk"]}',
+                        None)  # кэш очень похож на словарь, и метод get действует так же. Он забирает значение по ключу, если его нет, то забирает None.
 
+        # если объекта нет в кэше, то получаем его и записываем в кэш
+        if not obj:
+            obj = super().get_object(queryset=self.queryset)
+            cache.set(f'product-{self.kwargs["pk"]}', obj)
 
-# def news_page_list(request):
-#     """ Представление для вывода страницы с новостями """
-#     newslist = Post.objects.all().order_by('-rating')[:5]
-#     return render(request, 'news/news.html', {'newslist': newslist})
+        return obj
+
 
 class Posts(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     model = Post
@@ -45,6 +45,7 @@ class Posts(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         context['filter'] = PostFilter(self.request.GET, queryset=self.get_queryset())
         context['is_not_author'] = not self.request.user.groups.filter(name='authors').exists()
         return context
+
 
 class AuthorsPage(LoginRequiredMixin, ListView):
     model = Author  # queryset = Author.objects.all()
@@ -63,6 +64,7 @@ class PostsList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         return context
+
 
 class PostSearch(LoginRequiredMixin, ListView):
     model = Post
@@ -109,11 +111,13 @@ class PostUpdate(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
         id = self.kwargs.get('pk')
         return Post.objects.get(pk=id)
 
+
 class PostDelete(LoginRequiredMixin, DeleteView):
     form_class = PostForm
     model = Post
     template_name = 'news/post_delete.html'
     success_url = reverse_lazy('post_list')
+
 
 class ProtectedView(LoginRequiredMixin, TemplateView):
     template_name = 'news/news.html'
@@ -180,7 +184,7 @@ class AppointmentView(View):
             subject=f'{appointment.client_name} {appointment.date.strftime("%Y-%M-%d")}',
             # имя клиента и дата записи будут в теме для удобства
             message=appointment.message,  # сообщение с кратким описанием проблемы
-            from_email='alexander.katleev@yandex.ru',  # здесь указываете почту, с которой будете отправлять (об этом попозже)
+            from_email='alexander.katleev@yandex.ru',  # здесь указываете почту, с которой будете отправлять
             recipient_list=[]  # здесь список получателей. Например, секретарь, сам врач и т. д.
         )
 

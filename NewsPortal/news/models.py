@@ -5,6 +5,7 @@ from django.urls import reverse
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
+from django.core.cache import cache
 
 world = 'WD'
 politic = 'PL'
@@ -113,6 +114,12 @@ class Post(models.Model):
         dataf = 'Post from {}'.format(self.dataCreations.strftime('%d.%m.%Y %H:%M'))
         return f"{dataf},{self.author},{self.title}"
 
+    def get_absolute_url(self):  # добавим абсолютный путь, чтобы после создания нас перебрасывало на страницу с товаром
+        return f'/post/{self.id}'
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)  # сначала вызываем метод родителя, чтобы объект сохранился
+        cache.delete(f'post-{self.pk}')  # затем удаляем его из кэша, чтобы сбросить его
 
 class PostCategory(models.Model):
     """

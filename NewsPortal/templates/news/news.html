@@ -2,10 +2,12 @@
 {% load static %}
 {% load custom_filters %}
 {% load custom_tags %}
+{% load cache %}
 
 {% block title %}
 Post
 {% endblock title %}
+{% cache 30 MyCss %}
 {% block MyCss %}
 <title> {{ news.title }}</title>
 <link rel="stylesheet" href="{% static 'css/base.css' %}">
@@ -17,6 +19,8 @@ Post
   crossorigin="anonymous"></script>
 <script src="{% static 'js/bootstrap.min.js' %}"></script>
 {% endblock %}
+{% endcache %}
+
 
 {% block MyContent %}
 <div class="navbar navbar-inverse navbar-fixed-top">
@@ -34,7 +38,7 @@ Post
           <li><a href=post2/>Другие новости</a></li>
           <li><a href=search/>Поиск новостей</a></li>
           <li><a href=create/>Создать</a></li>
-          <li><a href=edit/>Редактировать</a></li>
+          <li><a href=articles/<int:pk>/edit//>Редактировать</a></li>
           <li><a href=categories/<int:pk/>Подписки</a></li>
           <li><a href=../sign/login/>Вход пользователя/Регистрация</a></li>
         </ul>
